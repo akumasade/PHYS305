@@ -8,7 +8,7 @@ def fi(x):
     return math.sin(x)
 
 #error should look like line
-def trapezoidal(func, xmin, xmax, n):
+def trap(func, xmin, xmax, n):
     sum = 0.5*(f(xmin)+f(xmax))
     x = xmin
     dx = (xmax-xmin)/n
@@ -28,7 +28,7 @@ while n < nmax:
     #print n
     dx = (xmax-xmin)/n
     dxplot.append(dx)
-    num_int = trapezoidal(f, xmin, xmax, n)
+    num_int = trap(f, xmin, xmax, n)
     true_int = fi(xmax)-fi(xmin)
     errplot.append(abs(num_int - true_int))
 
