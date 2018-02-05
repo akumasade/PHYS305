@@ -141,7 +141,7 @@ def main(alpha_in, beta_in, dx, integrator, xmax, y0):
     plt.show()
 
 def new_option_parser():
-    from amuse.units.optparse import OptionParser
+    from optparse import OptionParser
     result = OptionParser()
     result.add_option("-a",
                       dest="alpha_in", type="float", default ="-2.0",

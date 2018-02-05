@@ -74,14 +74,14 @@ plt.clf()
 
 #-------part b-------
 Ns = np.array([4, 8, 16, 32])
-dxs = Ns/2.0
+dxs = 2.0/Ns
 traps = np.array([])
 for n in Ns:
     traps = np.append(traps, [trap(f, xmin, xmax, n)])
 
-print len(dxs), len(traps)
+
 p = np.polyfit(dxs, traps, 3)
-print p
+print p[3]
 
 dxx = np.linspace(-50, 50)
 der = p[0]*dxx**3 + p[1]*dxx**2 + p[2]*dx + p[3]
@@ -94,5 +94,10 @@ plt.title('Problem 2b.')
 plt.xlabel('$\Delta$x')
 plt.ylabel('Integral')
 plt.legend()
-#plt.savefig('prob1c.png')
-plt.show()
+plt.savefig('prob2b.png')
+#plt.show()
+
+#when dx = 1/16
+val = trap(f, xmin, xmax, 32)
+print val
+print "Error = ", abs(actual - val)
