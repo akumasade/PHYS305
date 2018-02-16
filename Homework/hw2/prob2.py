@@ -94,7 +94,7 @@ plt.title('Duffing oscillator, integrator = '+iname)
 subplot2 = fig.add_subplot(2, 1, 2)
 for xplot,eplot in zip(xplots, eplots):
     plt.plot(xplot, eplot)
-plt.xlabel('x')
+plt.xlabel('t')
 plt.ylabel('$\delta$E/E$_0$')
 plt.tight_layout()
 plt.savefig("2b.png")
@@ -144,7 +144,7 @@ fig = plt.figure()
 
 plt.plot(dxs, diffs, 'r')
 plt.loglog()
-plt.xlabel('$\Delta$x')
+plt.xlabel('$\Delta$t')
 plt.ylabel('|E(20)-E(0)|')
 plt.title('Duffing oscillator, integrator = '+iname)
 
@@ -167,7 +167,8 @@ yplot = [y[0]]
 vplot = [y[1]]
 E0 = energy(x, y)
 Escale = max(abs(E0), 1.0)
-print 'E0, Escale =', E0, Escale
+#print 'E0, Escale =', E0, Escale
+print "Initial Conditions:", x, y
 eplot = [0.0]
 while x < xmax:
 
@@ -183,7 +184,6 @@ yplots.append(yplot)
 vplots.append(vplot)
 eplots.append(eplot)
 
-print "forward:",x, y
 #reverse
 dx = -dx
 
@@ -193,11 +193,11 @@ yplot = [y[0]]
 vplot = [y[1]]
 E0 = energy(x, y)
 Escale = max(abs(E0), 1.0)
-print 'E0, Escale =', E0, Escale
+#print 'E0, Escale =', E0, Escale
 eplot = [0.0]
 while x >= 0.0:
 
-    if x == 0.0: print "backwards:", x, y
+    if x == 0.0: print "Reverse ending point:", x, y
 
     x, y = kickdrift(f, x, y, dx)
 
@@ -210,7 +210,6 @@ xplots.append(xplot)
 yplots.append(yplot)
 vplots.append(vplot)
 eplots.append(eplot)
-
 
 
 #It's time reversible~!! (though it probably should not be, goddammit)

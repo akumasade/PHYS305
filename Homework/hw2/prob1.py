@@ -164,13 +164,16 @@ x = 0.0
 y0 = 1.0
 v0 = 1.5
 y = np.array([y0, v0])
+
+
 xplot = [x]
 yplot = [y[0]]
 vplot = [y[1]]
 E0 = energy(x, y)
 Escale = max(abs(E0), 1.0)
-print 'E0, Escale =', E0, Escale
+#print 'E0, Escale =', E0, Escale
 eplot = [0.0]
+print "Initial Conditions:", x, y
 while x < xmax:
 
     x, y = RungeKutta(f, x, y, dx)
@@ -185,7 +188,6 @@ yplots.append(yplot)
 vplots.append(vplot)
 eplots.append(eplot)
 
-print "forward:",x, y
 #reverse
 dx = -dx
 
@@ -198,11 +200,11 @@ yplot = [y[0]]
 vplot = [y[1]]
 E0 = energy(x, y)
 Escale = max(abs(E0), 1.0)
-print 'E0, Escale =', E0, Escale
+#print 'E0, Escale =', E0, Escale
 eplot = [0.0]
 while x >= 0.0:
 
-    if x==0: print "backwards:", x, y
+    if x==0: print "Reverse ending point:", x, y
     x, y = RungeKutta(f, x, y, dx)
 
     xplot.append(x)
