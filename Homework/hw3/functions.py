@@ -18,7 +18,6 @@ def initialize(n, seed, v0, rj, mj):
         pos = np.array([[0.,0,0],[1.0,0,0],[0,rj,0]])
         vel = np.array([[0,0,0],[0,ve,0],[-vj,0,0]])
     else:
-        np.random.seed(12345)
         r = (np.random.random(n))**(1./3)
         theta = np.arccos(2*np.random.random(n)-1)
         phi = 2*np.pi*np.random.random(n)
@@ -27,7 +26,13 @@ def initialize(n, seed, v0, rj, mj):
         z = r*np.cos(theta)
         pos = zip(x,y,z)
 
-        vel = np.zeros((n,3))
+        v = 0.7
+        theta = np.arccos(2*np.random.random(n)-1)
+        phi = 2*np.pi*np.random.random(n)
+        x = v*np.sin(theta)*np.cos(phi)
+        y = v*np.sin(theta)*np.sin(phi)
+        z = v*np.cos(theta)
+        vel = zip(x,y,z)
     return mass,pos,vel
 
 def potential_energy(mass, pos, eps2):
@@ -131,8 +136,13 @@ def orbital_elements(m1, m2, x1, x2, v1, v2, eps2):
     ecc = (1 + 2*E*h2/M**2)**0.5
     return sma, ecc, E, h2**0.5
 
-def initial_pythag(seed):
+def initial_pythag(seed, p2y):
     mass = np.array([5.0, 4.0, 3.0])
-    pos = np.array([[0,0,0],[0,3.0,0],4.0,0,0]])
-    vel = np.array([[0,0,0],[0,0,0],[0,0,0]])
+    pos = np.array([[0,0,0],[0,3.0,0],[4.0,p2y,0]])
+    vel = np.array([[0,0,0],[0,0,0],[0,0,0.0]])
     return mass,pos,vel
+
+def rms_dist(mass, pos1, pos2):
+    temp = mass*((pos1-pos2)**2).sum(axis=1)
+    M_inv = 1.0/(mass.sum())
+    return math.sqrt(M_inv*temp.sum())

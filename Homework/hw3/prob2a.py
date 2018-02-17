@@ -7,7 +7,7 @@ def main(N, seed, eps, dt, t_end, v0):
     # Initial conditions.
 
     t = 0.0
-    mass,pos,vel = initial_pythag(N, seed, v0, rj, mj)
+    mass,pos,vel = initial_pythag(seed, 0.0)
 
     # Initial diagnostics.
 
@@ -25,7 +25,10 @@ def main(N, seed, eps, dt, t_end, v0):
     hplot = []
     smaplot = []
     eccplot = []
-    xplot = []
+
+    xplot0 = []
+    xplot1 = []
+    xplot2 = []
 
     rp = 1.e6
     rpp = rp+1.
@@ -43,15 +46,18 @@ def main(N, seed, eps, dt, t_end, v0):
             v2 = (r-rp)/dt
             tmax = t - 1.5*dt + dt*(-v1)/(v2-v1)
             xmax = 0.5*(pospp+posp) + 0.5*(pos[0]-pos[1]-pospp)*(-v1)/(v2-v1)
-            print 'maximum', tmax, rp, math.atan2(posp[1], posp[0]), \
-                  (xmax**2).sum()**0.5, math.atan2(xmax[1], xmax[0]) \
+            #print 'maximum', tmax, rp, math.atan2(posp[1], posp[0]), \
+            #      (xmax**2).sum()**0.5, math.atan2(xmax[1], xmax[0]) \
 
         tplot.append(t)
         dEplot.append(E-E0)
         hplot.append(h)
         smaplot.append(a)
         eccplot.append(e)
-        xplot.append(pos[0])
+
+        xplot0.append(pos[0][0])
+        xplot1.append(pos[1][0])
+        xplot2.append(pos[2][0])
 
         rpp = rp
         rp = r
@@ -61,15 +67,16 @@ def main(N, seed, eps, dt, t_end, v0):
     # Final diagnostics.
 
     output(t, E0, mass, pos, vel, eps**2)
-    print "Max eccentricity:", max(eccplot)
-    #only need gto plot eccentricity
-    plt.figure()
+    #print "Max eccentricity:", max(eccplot)
 
-    #plt.subplot(2,2,4)
-    plt.plot(tplot, eccplot)
+    plt.figure()
+    plt.plot(tplot, xplot0, 'r', label="particle 0")
+    plt.plot(tplot, xplot1, 'b', label="particle 1")
+    plt.plot(tplot, xplot2, 'g', label="particle 2")
     plt.xlabel('t')
     plt.ylabel('x')
-    plt.title('$M_{j}=$%s, $R_{j}=$%s'%(mj, rj))
+    plt.title('Pythagorean Configuration')
+    plt.legend()
 
     #plt.tight_layout()
     #plt.show()
@@ -88,7 +95,7 @@ def new_option_parser():
                       dest="eps", type="float", default ="0.1",
                       help="softening length eps [%default]")
     result.add_option("-d",
-                      dest="dt", type="float", default ="0.01",
+                      dest="dt", type="float", default ="0.001",
                       help="time step [%default]")
     result.add_option("-t",
                       dest="t_end", type="float", default ="50.0",
