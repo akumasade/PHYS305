@@ -146,3 +146,16 @@ def rms_dist(mass, pos1, pos2):
     temp = mass*((pos1-pos2)**2).sum(axis=1)
     M_inv = 1.0/(mass.sum())
     return math.sqrt(M_inv*temp.sum())
+
+def rms_size(mass, pos):
+    temp = mass*(pos**2).sum(axis=1)
+    M_inv = 1.0/(mass.sum())
+    return math.sqrt(M_inv*temp.sum())
+
+def plot_snap(t, pos):
+    plt.figure()
+    plt.title("Time t = %s"%t)
+    posT = np.transpose(pos)
+    plt.plot(posT[0], posT[1], '.')
+    plt.savefig("3c-time%s.png"%t)
+    plt.clf()

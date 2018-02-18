@@ -13,9 +13,10 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
     vel1 = vel1 + np.array([-0.5, 0.0,0])
     mass1 = mass1*0.5
     #cluster 2
+
     mass2,pos2,vel2 = initialize(N, seed, v0, rj, mj)
-    pos1 = pos1 + np.array([-2, -0.5, 0])
-    vel1 = vel1 + np.array([-0.5, 0.0,0])
+    pos2 = pos2 + np.array([-2, -0.5, 0])
+    vel2 = vel2 + np.array([-0.5, 0.0,0])
     mass2 = mass2*0.5
 
     #combinte them
@@ -35,7 +36,12 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
 
     Eplot = []
     KEplot = []
+    RMSplot = []
     snapshots = [0.0, 1.0, 2.0, 5.0, 10.0, 30.0]
+
+    #plot t=0
+    print t
+    plot_snap(t, pos)
 
     while t < t_end-0.5*dt:
         t,pos,vel = step(t, mass, pos, vel, eps**2, dt)
@@ -45,26 +51,26 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
                                       pos[1], vel[0], vel[1], eps**2)
 
         KE = kinetic_energy(mass, vel)
+        RMS = rms_size(mass, pos)
         tplot.append(t)
         dEplot.append(E-E0)
 
         Eplot.append(E)
-        KEplot.appned(KE)
+        KEplot.append(KE)
+        RMSplot.append(RMS)
 
         #plotting given snapshots
         if t in snapshots:
-            plt.figure()
-
-            plt.title("Time t = %s"%t)
-            plt.savefig("3c-time%s.png"%t)
+            print t
+            plot_snap(t, pos)
     # Final diagnostics.
 
     output(t, E0, mass, pos, vel, eps**2)
     #print "Max eccentricity:", max(eccplot)
 
-    plt.figure()
-    plt.plot(tplot, Eplot)
-    plt.plot(tplot, Eplot)
+
+    plt.plot(tplot, Eplot, label="Total")
+    plt.plot(tplot, KEplot, label="Kinetic")
     plt.xlabel('t')
     plt.ylabel('E')
     plt.title('Energy plot')
@@ -73,12 +79,23 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
     #plt.tight_layout()
     #plt.show()
     plt.savefig("3c-energy.png")
+    plt.clf()
+
+    plt.plot(tplot, RMSplot)
+    plt.xlabel('t')
+    plt.ylabel('RMS')
+    plt.title('RMS Size')
+
+    #plt.tight_layout()
+    #plt.show()
+    plt.savefig("3c-RMS.png")
+    plt.clf()
 
 def new_option_parser():
     from optparse import OptionParser
     result = OptionParser()
     result.add_option("-n",
-                      dest="N", type="int", default ="10",#10 for now, but goddamn this is gonna suck
+                      dest="N", type="int", default ="50",#10 for now, but goddamn this is gonna suck
                       help="number of particles [%default]")
     result.add_option("-s",
                       dest="seed", type="int", default ="12345",
