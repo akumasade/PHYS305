@@ -77,24 +77,29 @@ def main(N, seed, eps, dt, t_end, v0):
             print "Max eccentricity:", max(eccplot)
             ecc_max[i][j] =  max(eccplot)
 
+    ecc_max_max = np.amax(ecc_max)
+    ecc_max_min = np.amin(ecc_max)
+    print "Maximum e of all runs:", ecc_max_max
+    print "Minimum e of all runs:", ecc_max_min
     #plot colors/sizes
     color = np.where(ecc_max>0.5,'r','b')
-    size = 20*2**ecc_max
+    size = np.log(ecc_max/ecc_max_min) + 0.01
 
     #only need gto plot eccentricity
-    plt.figure()
+    fig = plt.figure()
     for i,mj in enumerate(Mj):
         for j,rj in enumerate(Rj):
-            plt.plot(mj, rj, s=size[i][j], c=color[i][j])
+            plt.scatter(mj, rj, s=size[i][j], c=color[i][j])
     plt.xlabel('$M_{j}$')
     plt.ylabel('$R_{j}$')
     plt.title('Outcomes')
-    red_patch = mpatches.Patch(color='red', label='$ecc_{max} > 0.5$')
-    plt.legend(handles=[red_patch])
+    red_patch = mpatches.Patch(color='r', label='$ecc_{max} > 0.5$')
+    blue_patch = mpatches.Patch(color='b', label='$ecc_{max} \leq 0.5$')
+    plt.legend(handles=[red_patch, blue_patch], bbox_to_anchor=(1.04,1))
 
     #plt.tight_layout()
     #plt.show()
-    plt.savefig("1b.png")
+    fig.savefig("1b.png", bbox_inches='tight')
 
 def new_option_parser():
     from optparse import OptionParser
