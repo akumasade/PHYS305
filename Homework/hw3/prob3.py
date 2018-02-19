@@ -13,10 +13,9 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
     vel1 = vel1 + np.array([-0.5, 0.0,0])
     mass1 = mass1*0.5
     #cluster 2
-
     mass2,pos2,vel2 = initialize(N, seed, v0, rj, mj)
     pos2 = pos2 + np.array([-2, -0.5, 0])
-    vel2 = vel2 + np.array([-0.5, 0.0,0])
+    vel2 = vel2 + np.array([0.5, 0.0,0])
     mass2 = mass2*0.5
 
     #combinte them
@@ -46,7 +45,7 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
             print "snapshot at:",t
             plot_snap(t, pos)
             ind +=1
-        
+
         t,pos,vel = step(t, mass, pos, vel, eps**2, dt)
 
         E = energy(mass, pos, vel, eps**2)
@@ -82,7 +81,7 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
     plt.ylabel('KE')
     plt.title('Kinetic Energy plot')
     plt.legend()
-    
+
     plt.savefig("3c-KE.png")
     plt.clf()
 

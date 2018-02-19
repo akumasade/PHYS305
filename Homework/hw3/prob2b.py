@@ -11,6 +11,14 @@ def main(N, seed, eps, dt, t_end, v0):
     mass,pos,vel = initial_pythag(seed, 0.0)
     mass,pos2,vel2 = initial_pythag(seed, 0.5)
 
+    #move to center of mass frame for both
+    m = mass.reshape(3,1)/mass.sum()
+    pos -= (m*pos).sum(axis=0)
+    vel -= (m*vel).sum(axis=0)
+
+    pos2 -= (m*pos2).sum(axis=0)
+    vel2 -= (m*vel2).sum(axis=0)
+
     # Initial diagnostics.
 
     E0 = energy(mass, pos, vel, eps**2)
@@ -41,7 +49,7 @@ def main(N, seed, eps, dt, t_end, v0):
         E = energy(mass, pos, vel, eps**2)
         a,e,Erel,h = orbital_elements(mass[0], mass[1], pos[0],
                                       pos[1], vel[0], vel[1], eps**2)
-        
+
         r = (((pos[0]-pos[1])**2).sum())**0.5
         #print t, E-E0, a, e, r
         if r < rp and rp >= rpp:
