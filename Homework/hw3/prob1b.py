@@ -9,9 +9,6 @@ def main(N, seed, eps, dt, t_end, v0):
     Mj = [0.01*x for x in range(1,21)]
     Rj = [0.1*x for x in range(12,26)]
 
-    Mj = Mj[:1]
-    Rj = Rj[:1]
-
     ecc_max = np.zeros((len(Mj),len(Rj)))
 
     #loop thru mj and rj

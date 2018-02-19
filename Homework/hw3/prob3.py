@@ -37,13 +37,16 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
     Eplot = []
     KEplot = []
     RMSplot = []
-    snapshots = [0.0, 1.0, 2.0, 5.0, 10.0, 30.0]
-
-    #plot t=0
-    print t
-    plot_snap(t, pos)
+    snapshots = np.array([0.0, 1.0, 2.0, 5.0, 10.0, 30.0])
+    ind = 0
 
     while t < t_end-0.5*dt:
+        #plotting given snapshots
+        if t>snapshots[ind]-dt and t<=snapshots[ind]:
+            print "snapshot at:",t
+            plot_snap(t, pos)
+            ind +=1
+        
         t,pos,vel = step(t, mass, pos, vel, eps**2, dt)
 
         E = energy(mass, pos, vel, eps**2)
@@ -59,26 +62,28 @@ def main(N, seed, eps, dt, t_end, v0, rj, mj):
         KEplot.append(KE)
         RMSplot.append(RMS)
 
-        #plotting given snapshots
-        if t in snapshots:
-            print t
-            plot_snap(t, pos)
+
     # Final diagnostics.
 
     output(t, E0, mass, pos, vel, eps**2)
     #print "Max eccentricity:", max(eccplot)
 
 
-    plt.plot(tplot, Eplot, label="Total")
-    plt.plot(tplot, KEplot, label="Kinetic")
+    plt.plot(tplot, Eplot)
     plt.xlabel('t')
     plt.ylabel('E')
-    plt.title('Energy plot')
+    plt.title('Total Energy plot')
     plt.legend()
+    plt.savefig("3c-E.png")
+    plt.clf()
 
-    #plt.tight_layout()
-    #plt.show()
-    plt.savefig("3c-energy.png")
+    plt.plot(tplot, KEplot, 'r')
+    plt.xlabel('t')
+    plt.ylabel('KE')
+    plt.title('Kinetic Energy plot')
+    plt.legend()
+    
+    plt.savefig("3c-KE.png")
     plt.clf()
 
     plt.plot(tplot, RMSplot)
@@ -95,7 +100,7 @@ def new_option_parser():
     from optparse import OptionParser
     result = OptionParser()
     result.add_option("-n",
-                      dest="N", type="int", default ="50",#10 for now, but goddamn this is gonna suck
+                      dest="N", type="int", default ="150",#10 for now, but goddamn this is gonna suck
                       help="number of particles [%default]")
     result.add_option("-s",
                       dest="seed", type="int", default ="12345",
